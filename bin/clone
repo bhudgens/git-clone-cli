@@ -54,6 +54,19 @@ ${_configOverrides.join('\n')}
 
 Cache all repos for the orgs or users specified in the GITHUB_ORGS
 environment variable.
+
+Examples:
+
+  # clone --githubOrgs 'org1,org1,org3'
+
+  Orgs in your environment
+
+  # export GITHUB_ORGS="org1,org1,org3"
+  # clone
+
+  Trim the results by providing a search
+
+  # clone 'search'
 `;
 
 /** Process The Docopts */
@@ -77,6 +90,7 @@ log.enable.verbose = config.verbose;
  ********************************************************************/
 
 const api = require('../lib/api.js');
+const fs = require('fs-promise');
 
 /**********************************************************************
  * Support Overriding Any Config By command line
@@ -122,14 +136,32 @@ const _getUsersSelection = repos => new Promise((resolve, reject) => {
   prompt.delimiter = "";
   prompt.start();
   prompt.get([{
-    name: "repo"
-  }], (error, result) => {
-    if (error) {
-      return reject(error);
-    }
-    return resolve(repos[result.repo]);
-  });
+      name: "Repo"
+    }],
+    (error, result) => error
+    ? reject(error)
+    : resolve(repos[result.repo]));
 });
+
+/**
+ * If the argument for purging the cache is set on the
+ * command line we will delete the file which triggers
+ * a cache update
+ * @return {Promise}   A promise when the action is complete
+ */
+const _purgeCacheFile = () => config.forceCacheUpdate
+  ? fs.unlink(config.repoCacheFile)
+  : Promise.resolve();
+
+/**********************************************************************
+ * Guards
+ *********************************************************************/
+
+/* No point in continuing without ORGS specified */
+if (!config.githubOrgs) {
+  log.help(help);
+  _error(new Error("Must specify GitHub Org(s) to cache"));
+}
 
 /**********************************************************************
  * Main
@@ -137,7 +169,8 @@ const _getUsersSelection = repos => new Promise((resolve, reject) => {
 
 config.search = config['<repo>'] || config.search;
 
-api.github.getGithubReposByOrg(config.githubOrg)
+_purgeCacheFile()
+  .then(() => api.github.getGithubReposByOrg(config.githubOrgs.split(',')))
   .then(repos => config.search
     ? repos.filter(repo => ~repo.name.toLowerCase().indexOf(config.search.toLowerCase()))
     : repos)
