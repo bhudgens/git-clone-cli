@@ -44,11 +44,11 @@ environment variable.
 
 Examples:
 
-  # clone --githubOrgs 'org1,org1,org3'
+  # clone --githubOrgs 'org1,org1,org3,user1,user2'
 
   Orgs in your environment
 
-  # export GITHUB_ORGS="org1,org1,org3"
+  # export GITHUB_ORGS="org1,org1,org3,user1,user2"
   # clone
 
   Trim the results by providing a search
