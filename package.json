@@ -1,0 +1,28 @@
+{
+  "name": "git-clone-cli",
+  "version": "2.0.1",
+  "description": "Cache Repos for a Github user or org and use cache to clone quickly",
+  "main": "./lib/api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bhudgens/git-clone-cli"
+  },
+  "bin": {
+    "clone": "./bin/clone"
+  },
+  "author": "Benjamin Hudgens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bhudgens/git-clone-cli/issues"
+  },
+  "homepage": "https://github.com/bhudgens/git-clone-cli",
+  "dependencies": {
+    "docopt": "0.6.2",
+    "fs-promise": "2.0.2",
+    "iphb-logs": "0.0.18",
+    "prompt": "1.0.0"
+  }
+}
