@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/*eslint operator-linebreak: ["error", "before"]*/
+
 "use strict";
 
 /**********************************************************************
@@ -126,7 +128,7 @@ ${_message.join('\n')}
  *********************************************************************/
 
 const _error = error => {
-  log.error(error.message);
+  log.error(error.message || error);
   log.verbose(error.stack);
   process.exit(1);
 };
@@ -136,11 +138,11 @@ const _getUsersSelection = repos => new Promise((resolve, reject) => {
   prompt.delimiter = "";
   prompt.start();
   prompt.get([{
-      name: "Repo"
+      name: "select"
     }],
     (error, result) => error
     ? reject(error)
-    : resolve(repos[result.repo]));
+    : resolve(repos[result.select]));
 });
 
 /**
@@ -149,7 +151,7 @@ const _getUsersSelection = repos => new Promise((resolve, reject) => {
  * a cache update
  * @return {Promise}   A promise when the action is complete
  */
-const _purgeCacheFile = () => config.forceCacheUpdate
+const _purgeCacheFileIfRequested = () => config.forceCacheUpdate
   ? fs.unlink(config.repoCacheFile)
   : Promise.resolve();
 
@@ -158,10 +160,13 @@ const _purgeCacheFile = () => config.forceCacheUpdate
  *********************************************************************/
 
 /* No point in continuing without ORGS specified */
-if (!config.githubOrgs) {
-  log.help(help);
-  _error(new Error("Must specify GitHub Org(s) to cache"));
-}
+const _guards = () => fs.lstat(config.repoCacheFile)
+  .catch(() => config.githubOrgs
+    || Promise.reject(new Error("Must specify GitHub Org(s) to cache")))
+  .catch(e => {
+    log.help(help);
+    _error(e);
+  });
 
 /**********************************************************************
  * Main
@@ -169,8 +174,11 @@ if (!config.githubOrgs) {
 
 config.search = config['<repo>'] || config.search;
 
-_purgeCacheFile()
-  .then(() => api.github.getGithubReposByOrg(config.githubOrgs.split(',')))
+_guards()
+  .then(_purgeCacheFileIfRequested)
+  .then(() => fs.lstat(config.repoCacheFile))
+  .catch(() => api.github.updateCache(config.githubOrgs.split(','), config.repoCacheFile))
+  .then(() => api.github.getGithubReposByCache(config.repoCacheFile))
   .then(repos => config.search
     ? repos.filter(repo => ~repo.name.toLowerCase().indexOf(config.search.toLowerCase()))
     : repos)
