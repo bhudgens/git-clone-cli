@@ -8,7 +8,7 @@ Given a list of GitHub users or orgs, caches all the GitHub metadata and makes s
 ➜  ~ clone blog   
 [Info]    [0]: bhudgens/blog
 select 0
-[Info]    Cloning into 'git-clone-cli'...
+[Info]    Cloning into 'blog'...
 ```
 
 ## Help:
