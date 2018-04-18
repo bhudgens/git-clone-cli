@@ -1,6 +1,6 @@
 {
   "name": "git-clone-cli",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Cache Repos for a Github user or org and use cache to clone quickly",
   "main": "./lib/api.js",
   "scripts": {
