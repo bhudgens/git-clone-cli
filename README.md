@@ -11,6 +11,12 @@ select 0
 [Info]    Cloning into 'blog'...
 ```
 
+## Loading the Cache
+
+GitHub has several methods of auth.  The easiest way to authenticate with this tool is to create a [personal access token](https://github.com/settings/tokens) with 'repo' access.  (You will want to make sure the key is authorized for SSO if you work at a company with SSO enabled.)  Use your normal username and the access key as your password.  Leave the 2FA prompt blank.  
+
+If you want to use your normal credentials but you do not have 2FA activated - you can hit enter at the 2FA prompt and leave it blank.
+
 ## Help:
 
 ```bash
