@@ -17,5 +17,5 @@ module.exports = {
   githubOrgs: process.env.GITHUB_ORGS,
   githubMaxConcurrency: process.env.GITHUB_MAXCONCURRENCY || 100,
   githubAuthHeader: process.env.GITHUB_AUTH_HEADER,
-  repoCacheFile: process.env.REPO_CACHE_FILE || `${process.env.HOME}/Library/Caches/repocache`
+  repoCacheFile: process.env.REPO_CACHE_FILE || `${process.env.HOME}/.git_clone_cli.repocache`
 };
