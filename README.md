@@ -13,7 +13,7 @@ select 0
 
 ## Loading the Cache
 
-GitHub has several methods of auth.  The easiest way to authenticate with this tool is to create a [personal access token](https://github.com/settings/tokens) with 'repo' access.  (You will want to make sure the key is authorized for SSO if you work at a company with SSO enabled.)  Use your normal username and the access key as your password.  Leave the 2FA prompt blank.  
+To authenticate with this tool, create a [personal access token](https://github.com/settings/tokens) with 'repo' access.  (You will want to make sure the key is authorized for SSO if you work at a company with SSO enabled.)  Use your normal username and the access key as your password.
 
 If you want to use your normal credentials but you do not have 2FA activated - you can hit enter at the 2FA prompt and leave it blank.
 
@@ -45,19 +45,16 @@ Additional Options:
   --githubAuthHeader <githubAuthHeader>
   --repoCacheFile <repoCacheFile>
 
-Cache all repos for the orgs or users specified in the GITHUB_ORGS
-environment variable.
-
 Examples:
 
-  # clone --githubOrgs 'org1,org1,org3,user1,user2'
+  # Cache all repos you have access to under a list of companies and orgs
+  clone -f --githubOrgs 'org1,org1,org3,user1,user2'
 
-  Orgs in your environment
+    -or-
 
-  # export GITHUB_ORGS="org1,org1,org3,user1,user2"
-  # clone
+  export GITHUB_ORGS="org1,org1,org3,user1,user2"
+  clone -f
 
-  Trim the results by providing a search
-
-  # clone 'search'
+  # Search for a repo to clone after cache above is complete
+  clone $repo
 ```
